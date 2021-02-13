@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { apiUrl } from '../helpers/config'
+import { apiUrlRu, apiUrlEng } from '../helpers/config'
 
 export const GET_TEXT_REQUEST = 'GET_TEXT_REQUEST'
 export const GET_TEXT_SUCCESS = 'GET_TEXT_SUCCESS'
@@ -26,11 +26,20 @@ const getTextError = (message) => {
   }
 }
 
-export const getTexts = () => (dispatch) => {
+export const getTexts = (lang) => (dispatch) => {
   const request = getTextRequest()
   dispatch(request)
 
-  const url = `${apiUrl}/?type=all-meat&sentences=4`
+  let url
+
+  if (lang === 'ru') {
+    url = `${apiUrlRu}/get?format=json&number=4`
+  }
+
+  if (lang === 'eng') {
+    url = `${apiUrlEng}/?type=all-meat&sentences=4`
+  }
+
   axios
     .get(url)
     .then((response) => {

@@ -12,7 +12,14 @@ export const reducer = (state = initialState, action) => {
     case GET_TEXT_REQUEST:
       return { ...state, loading: true, loaded: false }
     case GET_TEXT_SUCCESS:
-      return { ...state, loading: false, loaded: true, texts: action.payload }
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        texts: Array.isArray(action.payload)
+          ? action.payload
+          : [action.payload.text],
+      }
     case GET_TEXT_ERROR:
       return { ...state, loading: false, loaded: false, error: action.payload }
 
