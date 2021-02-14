@@ -1,8 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
+import { Card, Button, Row, Col } from 'react-bootstrap'
+
+import {
+  Speedometer,
+  XCircle,
+  Vinyl,
+  ArrowRightCircle,
+  ArrowRepeat,
+} from 'react-bootstrap-icons'
 
 import { getTexts } from './actions'
 
@@ -15,6 +22,7 @@ class TextCard extends Component {
     printSpeed: 0,
     secondsAfterStart: 1,
     isMistake: false,
+    isTrainingFinished: false,
   }
 
   calculatePrintSpeed = () => {
@@ -28,12 +36,7 @@ class TextCard extends Component {
 
   handleKeyPress = (event) => {
     const keyCodes = [9, 20] // 9 -Tab, 20 - Caps Lock
-    if (
-      event.shiftKey ||
-      event.altKey ||
-      event.ctrlKey ||
-      keyCodes.includes(event.keyCode)
-    ) {
+    if (event.altKey || event.ctrlKey || keyCodes.includes(event.keyCode)) {
       return null
     }
 
@@ -48,6 +51,8 @@ class TextCard extends Component {
         this.stopTraining()
       }
     } else {
+      if (event.shiftKey) return null
+
       const mistakes = this.state.mistakes + 1
       this.setState({
         mistakes,
@@ -63,6 +68,8 @@ class TextCard extends Component {
 
   stopTraining = () => {
     clearInterval(this.intervalId)
+
+    this.setState({ isTrainingFinished: true })
   }
 
   handleChangeText = () => {
@@ -85,6 +92,7 @@ class TextCard extends Component {
       printSpeed: 0,
       secondsAfterStart: 1,
       isMistake: false,
+      isTrainingFinished: false,
     })
   }
 
@@ -112,37 +120,88 @@ class TextCard extends Component {
       texts && texts.slice(this.state.printedText.length + 1)
     return (
       <React.Fragment>
-        <Card>
-          <Card.Body>
-            <span style={{ color: 'green' }}>{this.state.printedText}</span>
-            <span
-              style={{
-                backgroundColor: this.state.isMistake ? 'red' : 'green',
-                color: 'white',
-              }}
-            >
-              {actualWord}
-            </span>
-            {unprintedText}
-          </Card.Body>
-          <Card.Body>
-            <span>Скорость симв./мин: {this.state.printSpeed}</span>
-          </Card.Body>
-          <Card.Body>
-            <span>Ошибок: {this.state.mistakes}</span>
-          </Card.Body>
-          <Card.Body>
-            <span>Точность: {this.state.percentAccuracy}%</span>
-          </Card.Body>
+        <Card className="main-card">
+          <Row>
+            <Col md={10}>
+              <Button
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => this.handleChangeLang('ru')}
+                variant="light"
+                className="lang-button"
+              >
+                Ru
+              </Button>
+              <Button
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => this.handleChangeLang('eng')}
+                variant="light"
+                className="lang-button"
+              >
+                Eng
+              </Button>
+              <Card.Body>
+                <Card.Text className="text-block">
+                  <span style={{ color: 'green' }}>
+                    {this.state.printedText}
+                  </span>
+                  <span
+                    style={{
+                      backgroundColor: this.state.isMistake ? 'red' : 'green',
+                      color: 'white',
+                    }}
+                  >
+                    {actualWord}
+                  </span>
+                  {unprintedText}
+                </Card.Text>
+              </Card.Body>
+              <div className="bottom-buttons">
+                <Button
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={this.handleChangeText}
+                  variant="light"
+                >
+                  <ArrowRightCircle className="icon" color="royalblue" />
+                  Другой текст
+                </Button>
+                <Button
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={this.handleRestart}
+                  variant="light"
+                >
+                  <ArrowRepeat className="icon" color="royalblue" />
+                  Заново
+                </Button>
+              </div>
+            </Col>
+            <Col md={2}>
+              <Card className="info-card">
+                <Card.Header>
+                  <span>
+                    <Speedometer className="icon" color="royalblue" /> Скорость
+                  </span>
+                </Card.Header>
+                <span className="print-result">
+                  {this.state.printSpeed} зн./мин
+                </span>
+                <Card.Header>
+                  <span>
+                    <XCircle className="icon" color="royalblue" /> Ошибок
+                  </span>
+                </Card.Header>
+                <span className="print-result">{this.state.mistakes}</span>
+                <Card.Header>
+                  <span>
+                    <Vinyl className="icon" color="royalblue" /> Точность
+                  </span>
+                </Card.Header>
+                <span className="print-result">
+                  {this.state.percentAccuracy}%
+                </span>
+              </Card>
+            </Col>
+          </Row>
         </Card>
-        <Button onClick={this.handleChangeText}>Другой текст</Button>
-        <Button onClick={this.handleRestart}>Заново</Button>
-        <Button onClick={() => this.handleChangeLang('ru')}>
-          Русская раскладка
-        </Button>
-        <Button onClick={() => this.handleChangeLang('eng')}>
-          Английская раскладка
-        </Button>
       </React.Fragment>
     )
   }

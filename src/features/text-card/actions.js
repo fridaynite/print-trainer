@@ -33,11 +33,11 @@ export const getTexts = (lang) => (dispatch) => {
   let url
 
   if (lang === 'ru') {
-    url = `${apiUrlRu}/get?format=json&number=4`
+    url = `${apiUrlRu}/get?format=json&number=3`
   }
 
   if (lang === 'eng') {
-    url = `${apiUrlEng}/?type=all-meat&sentences=4`
+    url = `${apiUrlEng}/?type=all-meat&sentences=5`
   }
 
   axios
