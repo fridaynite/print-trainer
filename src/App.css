@@ -35,3 +35,23 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.test-modal {
+  text-align: center;
+}
+
+.icon-finish {
+  margin-top: 10px;
+}
+
+.test-title {
+  display: inline-block;
+  color: royalblue;
+  margin-top: 5px;
+}
+
+.finish-result {
+  font-size: 35px;
+  font-weight: bold;
+  color: royalblue;
+}

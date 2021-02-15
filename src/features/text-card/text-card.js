@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import FinishModal from '../finish-modal/finish-modal'
+
 import { Card, Button, Row, Col } from 'react-bootstrap'
 
 import {
@@ -202,6 +204,14 @@ class TextCard extends Component {
             </Col>
           </Row>
         </Card>
+
+        <FinishModal
+          show={this.state.isTrainingFinished}
+          hide={this.handleRestart}
+          printSpeed={this.state.printSpeed}
+          mistakes={this.state.mistakes}
+          percentAccuracy={this.state.percentAccuracy}
+        />
       </React.Fragment>
     )
   }

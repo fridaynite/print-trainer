@@ -43,7 +43,6 @@ export const getTexts = (lang) => (dispatch) => {
   axios
     .get(url)
     .then((response) => {
-      console.log(response.data)
       const success = getTextSuccess(response.data)
       dispatch(success)
     })
